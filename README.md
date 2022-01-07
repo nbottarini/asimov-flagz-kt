@@ -40,3 +40,33 @@ dependencies {
     <version>0.2.1</version>
 </dependency>
 ```
+
+## Quick start
+
+1) Define an enum with your feature flags (it must implement the Feature interface):
+```kotlin
+enum class Features: Feature {
+    MY_FEATURE,
+    MY_OTHER_FEATURE
+}
+```
+
+2) Initialize the library by configuring your enum:
+```kotlin
+initFlagz {
+    featureEnum<Features>()
+    repositories(EnvironmentFeatureRepository())
+}
+```
+You'll have to configure one or more feature repositories. A repository provides a way to store and search for
+feature flag states (enabled or disabled).
+
+In this example the EnvironmentFeatureRepository looks for features in the system environment variables. The environment
+should be prefixed with 'FEATURE_'. For example 'FEATURE_MY_FEATURE=1', 'FEATURE_MY_OTHER_FEATURE=0'.
+
+4) Use that flags in your code:
+```kotlin
+    if (Features.MY_FEATURE.isEnabled) {
+        // Do something...
+    }
+```
