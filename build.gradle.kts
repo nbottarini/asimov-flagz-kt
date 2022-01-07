@@ -20,7 +20,7 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
     implementation("com.nbottarini:asimov-environment:1.0.1")
-    implementation("com.nbottarini:asimov-time:0.5")
+    implementation("com.nbottarini:asimov-time:0.5.1")
     implementation("com.google.code.gson:gson:2.8.9")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
     testImplementation("org.assertj:assertj-core:3.21.0")
