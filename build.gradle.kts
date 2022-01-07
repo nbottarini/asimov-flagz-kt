@@ -19,7 +19,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("com.nbottarini:asimov-environment:1.0")
+    implementation("com.nbottarini:asimov-environment:1.0.1")
     implementation("com.nbottarini:asimov-time:0.5")
     implementation("com.google.code.gson:gson:2.8.9")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
@@ -43,6 +43,8 @@ kotlin {
 java {
     withJavadocJar()
     withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 
     sourceSets["main"].apply {
         java.srcDirs("src")
