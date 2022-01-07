@@ -2,7 +2,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![CI Status](https://github.com/nbottarini/asimov-flagz-kt/actions/workflows/gradle.yml/badge.svg?branch=main)](https://github.com/nbottarini/asimov-flagz-kt/actions?query=branch%3Amain+workflow%3Aci)
 
-# Asimov CQBus
+# Asimov Flagz
 Feature flags library based on Togglz library.
 
 ## Installation
