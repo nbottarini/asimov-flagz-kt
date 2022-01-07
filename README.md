@@ -71,6 +71,19 @@ variable must be prefixed with 'FEATURE_'. For example 'FEATURE_MY_FEATURE=1', '
     }
 ```
 
+## EnabledByDefault
+By default, if a feature flag is not set is disabled. You can change this behaviour per-feature with the `EnabledByDefault`
+annotation.
+
+```kotlin
+enum class Features: Feature {
+    MY_FEATURE,
+    
+    @EnabledByDefault
+    MY_OTHER_FEATURE
+}
+```
+
 ## Feature repositories
 
 Feature repositories allows you to store and retrieve feature flags state.
@@ -230,5 +243,81 @@ initFlagz {
         ),
         SetStrategies.ALL
     )
+}
+```
+
+## Activation strategies
+
+You can provide different strategies to enable/disable features dynamically based on dates, gradual rollout, per user,
+per user roles or attributes, etc. You can also create your own strategies.
+
+To define a strategy for a feature you have to annotate it with the `Activation` annotation. For example:
+
+```kotlin
+enum class Features: Feature {
+    MY_FEATURE,
+
+    @Activation(ReleaseDateActivationStrategy.ID, [ActivationParam(PARAM_DATE, "2020-09-06T10:00:00Z")])
+    MY_OTHER_FEATURE
+}
+```
+
+### ReleaseDateActivationStrategy
+This strategy allows you to enable a feature in a certain date. The provided date must be in ISO 8601 format.
+
+### UsersActivationStrategy
+This strategy allows you to enable a feature only to certain users.
+
+```kotlin
+enum class Features: Feature {
+    MY_FEATURE,
+
+    @Activation(UsersActivationStrategy.ID, [ActivationParam(PARAM_USERS, "alice, bob")])
+    MY_OTHER_FEATURE
+}
+```
+
+Users must be set by using a userProvider. Read next section for details.
+
+## User providers
+Allows the customization of feature flags per user or user's attributes.
+
+You can pass a userProvider implementation to the initialization function. The default userProvider is `ThreadLocalUserProvider`.
+
+```kotlin
+initFlagz {
+    featureEnum<Features>()
+    repository(EnvironmentFeatureRepository())
+    userProvider(MyUserProvider())
+}
+```
+
+### ThreadLocalUserProvider
+This implementation allows you to set the current user per thread.
+
+You can access the current user provider by calling `FlagzContext.manager.userProvider`.
+```kotlin
+val userProvider = FlagzContext.manager.userProvider as ThreadLocalUserProvider
+
+userProvider.bind(SimpleFeatureUser("alice", mapOf("roles" to "admin")))
+
+// Do something and use feature flags
+
+userProvider.release()
+```
+Users have to implement the FeatureUser interface, or you can use SimpleFeatureUser implementation.
+
+If you are using a mediator / command-bus like [CQBus](](https://github.com/nbottarini/asimov-cqbus-kt)) you can add a 
+middleware to set the current user.
+```kotlin
+class SetFeatureFlagsUserMiddleware: Middleware {
+    override fun <T: Request<R>, R> execute(request: T, next: (T) -> R, context: ExecutionContext): R {
+        val userProvider = FlagzContext.manager.userProvider as? ThreadLocalUserProvider ?: return next(request)
+        val user = SimpleFeatureUser(context.identity.name, mapOf("roles", context.identity.roles.joinToString(", ")))
+        userProvider.bind(user)
+        val response = next(request)
+        userProvider.release()
+        return response
+    }
 }
 ```
