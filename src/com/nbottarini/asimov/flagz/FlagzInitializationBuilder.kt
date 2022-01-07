@@ -1,8 +1,8 @@
-package com.nbottarini.asimov.flagz.manager
+package com.nbottarini.asimov.flagz
 
-import com.nbottarini.asimov.flagz.Feature
-import com.nbottarini.asimov.flagz.FlagzContext
 import com.nbottarini.asimov.flagz.activations.ActivationStrategy
+import com.nbottarini.asimov.flagz.manager.DefaultFlagzManager
+import com.nbottarini.asimov.flagz.manager.FlagzManager
 import com.nbottarini.asimov.flagz.repositories.FeatureRepository
 import com.nbottarini.asimov.flagz.repositories.composite.CompositeFeatureRepository
 import com.nbottarini.asimov.flagz.repositories.inMemory.InMemoryFeatureRepository
