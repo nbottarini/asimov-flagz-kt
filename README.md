@@ -15,7 +15,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.nbottarini:asimov-flagz:0.2")
+    implementation("com.nbottarini:asimov-flagz:0.2.1")
 }
 ```
 
@@ -27,7 +27,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.nbottarini:asimov-flagz:0.2'
+    implementation 'com.nbottarini:asimov-flagz:0.2.1'
 }
 ```
 
@@ -37,6 +37,6 @@ dependencies {
 <dependency>
     <groupId>com.nbottarini</groupId>
     <artifactId>asimov-flagz</artifactId>
-    <version>0.2</version>
+    <version>0.2.1</version>
 </dependency>
 ```
