@@ -1,14 +1,14 @@
 package com.nbottarini.asimov.flagz.manager
 
 import com.nbottarini.asimov.flagz.Feature
-import com.nbottarini.asimov.flagz.activations.ActivationStrategy
-import com.nbottarini.asimov.flagz.activations.ReleaseDateActivationStrategy
-import com.nbottarini.asimov.flagz.activations.UsersActivationStrategy
-import com.nbottarini.asimov.flagz.metadata.MetadataCache
+import com.nbottarini.asimov.flagz.conditionalStrategies.ConditionalStrategy
+import com.nbottarini.asimov.flagz.conditionalStrategies.ReleaseDateStrategy
+import com.nbottarini.asimov.flagz.conditionalStrategies.UsersStrategy
+import com.nbottarini.asimov.flagz.manager.metadata.MetadataCache
 import com.nbottarini.asimov.flagz.repositories.FeatureRepository
 import com.nbottarini.asimov.flagz.repositories.FeatureState
-import com.nbottarini.asimov.flagz.user.NullUserProvider
-import com.nbottarini.asimov.flagz.user.UserProvider
+import com.nbottarini.asimov.flagz.user.provider.NullUserProvider
+import com.nbottarini.asimov.flagz.user.provider.UserProvider
 
 class DefaultFlagzManager(
     featureEnums: List<Class<out Feature>>,
@@ -16,9 +16,9 @@ class DefaultFlagzManager(
     override val userProvider: UserProvider = NullUserProvider(),
 ): FlagzManager {
     private val metadataCache = MetadataCache(featureEnums)
-    private val activationStrategies = mutableListOf(
-        UsersActivationStrategy(),
-        ReleaseDateActivationStrategy()
+    private val conditionalStrategies = mutableListOf(
+        UsersStrategy(),
+        ReleaseDateStrategy()
     )
 
     constructor(
@@ -27,8 +27,8 @@ class DefaultFlagzManager(
         userProvider: UserProvider = NullUserProvider(),
     ): this(listOf(featureEnum), repository, userProvider)
 
-    fun addActivationStrategy(strategy: ActivationStrategy) {
-        activationStrategies.add(strategy)
+    fun addConditionalStrategy(strategy: ConditionalStrategy) {
+        conditionalStrategies.add(strategy)
     }
 
     override fun allFeatures() = metadataCache.allFeatures()
@@ -53,13 +53,12 @@ class DefaultFlagzManager(
 
     private fun isEnabled(feature: Feature, states: List<FeatureState>): Boolean {
         val state = states.firstOrNull { it.feature == feature } ?: defaultState(feature)
-        if (state.isEnabled) {
-            if (!state.hasStrategy()) return true
+        return state.isEnabled && isConditionalEnabled(state)
+    }
 
-            val strategy = activationStrategies.firstOrNull { it.id == state.strategyId }
-            return strategy?.isEnabled(state, userProvider.currentUser) ?: false
-        }
-        return false
+    private fun isConditionalEnabled(state: FeatureState): Boolean {
+        val strategy = conditionalStrategies.firstOrNull { it.id == state.strategyId } ?: return true
+        return strategy.isEnabled(state, userProvider.currentUser)
     }
 
     private fun defaultState(feature: Feature) = metadataCache.get(feature).defaultState()

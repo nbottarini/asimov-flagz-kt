@@ -246,33 +246,33 @@ initFlagz {
 }
 ```
 
-## Activation strategies
+## Conditional strategies
 
-You can provide different strategies to enable/disable features dynamically based on dates, gradual rollout, per user,
-per user roles or attributes, etc. You can also create your own strategies.
+You can provide different strategies to enable/disable features dynamically based on dates, gradual rollout, per users,
+per user roles, per user attributes, etc. You can also create your own strategies.
 
-To define a strategy for a feature you have to annotate it with the `Activation` annotation. For example:
+To define a strategy for a feature you have to annotate it with the `Conditional` annotation. For example:
 
 ```kotlin
 enum class Features: Feature {
     MY_FEATURE,
 
-    @Activation(ReleaseDateActivationStrategy.ID, [ActivationParam(PARAM_DATE, "2020-09-06T10:00:00Z")])
+    @Conditional(ReleaseDateStrategy.ID, [Param(PARAM_DATE, "2020-09-06T10:00:00Z")])
     MY_OTHER_FEATURE
 }
 ```
 
-### ReleaseDateActivationStrategy
+### ReleaseDateStrategy
 This strategy allows you to enable a feature in a certain date. The provided date must be in ISO 8601 format.
 
-### UsersActivationStrategy
+### UsersStrategy
 This strategy allows you to enable a feature only to certain users.
 
 ```kotlin
 enum class Features: Feature {
     MY_FEATURE,
 
-    @Activation(UsersActivationStrategy.ID, [ActivationParam(PARAM_USERS, "alice, bob")])
+    @Conditional(UsersStrategy.ID, [Param(PARAM_USERS, "alice, bob")])
     MY_OTHER_FEATURE
 }
 ```

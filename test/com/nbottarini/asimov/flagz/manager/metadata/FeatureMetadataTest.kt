@@ -1,12 +1,12 @@
-package com.nbottarini.asimov.flagz.metadata
+package com.nbottarini.asimov.flagz.manager.metadata
 
 import com.nbottarini.asimov.flagz.Feature
-import com.nbottarini.asimov.flagz.activations.UsersActivationStrategy
-import com.nbottarini.asimov.flagz.activations.UsersActivationStrategy.Companion.PARAM_USERS
-import com.nbottarini.asimov.flagz.annotations.Activation
-import com.nbottarini.asimov.flagz.annotations.ActivationParam
-import com.nbottarini.asimov.flagz.annotations.EnabledByDefault
-import com.nbottarini.asimov.flagz.metadata.FeatureMetadataTest.Features.*
+import com.nbottarini.asimov.flagz.conditionalStrategies.UsersStrategy
+import com.nbottarini.asimov.flagz.conditionalStrategies.UsersStrategy.Companion.PARAM_USERS
+import com.nbottarini.asimov.flagz.conditionalStrategies.Conditional
+import com.nbottarini.asimov.flagz.conditionalStrategies.Param
+import com.nbottarini.asimov.flagz.EnabledByDefault
+import com.nbottarini.asimov.flagz.manager.metadata.FeatureMetadataTest.Features.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -22,13 +22,13 @@ class FeatureMetadataTest {
     }
 
     @Test
-    fun `feature metadata has activation strategy id if has an Activation annotation`() {
-        assertThat(ACTIVATION_FEATURE.metadata().strategyId).isEqualTo(UsersActivationStrategy.ID)
+    fun `feature metadata has conditional strategy id if has an Conditional annotation`() {
+        assertThat(CONDITIONAL_FEATURE.metadata().strategyId).isEqualTo(UsersStrategy.ID)
     }
 
     @Test
-    fun `feature metadata has activation strategy parameters if has an Activation annotation`() {
-        assertThat(ACTIVATION_FEATURE.metadata().strategyParams).isEqualTo(mapOf(PARAM_USERS to "alice, bob"))
+    fun `feature metadata has conditional strategy parameters if has an Conditional annotation`() {
+        assertThat(CONDITIONAL_FEATURE.metadata().strategyParams).isEqualTo(mapOf(PARAM_USERS to "alice, bob"))
     }
 
     @Test
@@ -48,7 +48,7 @@ class FeatureMetadataTest {
         @EnabledByDefault
         ENABLED_BY_DEFAULT_FEATURE,
 
-        @Activation(UsersActivationStrategy.ID, [ActivationParam(PARAM_USERS, "alice, bob")])
-        ACTIVATION_FEATURE,
+        @Conditional(UsersStrategy.ID, [Param(PARAM_USERS, "alice, bob")])
+        CONDITIONAL_FEATURE,
     }
 }

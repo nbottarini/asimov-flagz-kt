@@ -1,4 +1,6 @@
-package com.nbottarini.asimov.flagz.user
+package com.nbottarini.asimov.flagz.user.provider
+
+import com.nbottarini.asimov.flagz.user.FeatureUser
 
 class ThreadLocalUserProvider: UserProvider {
     private var threadLocalCurrentUser: ThreadLocal<FeatureUser?> = ThreadLocal()

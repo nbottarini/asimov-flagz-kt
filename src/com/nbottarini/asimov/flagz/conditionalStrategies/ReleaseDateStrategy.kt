@@ -1,11 +1,11 @@
-package com.nbottarini.asimov.flagz.activations
+package com.nbottarini.asimov.flagz.conditionalStrategies
 
 import com.nbottarini.asimov.time.Clock
 import com.nbottarini.asimov.time.LocalDateTimeParser
 import com.nbottarini.asimov.flagz.repositories.FeatureState
 import com.nbottarini.asimov.flagz.user.FeatureUser
 
-class ReleaseDateActivationStrategy: ActivationStrategy {
+class ReleaseDateStrategy: ConditionalStrategy {
     override val id = ID
 
     override fun isEnabled(featureState: FeatureState, user: FeatureUser?): Boolean {

@@ -1,9 +1,9 @@
-package com.nbottarini.asimov.flagz.activations
+package com.nbottarini.asimov.flagz.conditionalStrategies
 
 import com.nbottarini.asimov.flagz.repositories.FeatureState
 import com.nbottarini.asimov.flagz.user.FeatureUser
 
-class UsersActivationStrategy: ActivationStrategy {
+class UsersStrategy: ConditionalStrategy {
     override val id = ID
 
     override fun isEnabled(featureState: FeatureState, user: FeatureUser?): Boolean {

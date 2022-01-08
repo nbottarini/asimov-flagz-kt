@@ -1,4 +1,4 @@
-package com.nbottarini.asimov.flagz.annotations
+package com.nbottarini.asimov.flagz
 
 @Target(AnnotationTarget.FIELD)
 annotation class EnabledByDefault

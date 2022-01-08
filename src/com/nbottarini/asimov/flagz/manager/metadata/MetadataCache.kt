@@ -1,4 +1,4 @@
-package com.nbottarini.asimov.flagz.metadata
+package com.nbottarini.asimov.flagz.manager.metadata
 
 import com.nbottarini.asimov.flagz.Feature
 import java.util.concurrent.ConcurrentHashMap

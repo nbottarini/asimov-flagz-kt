@@ -1,20 +1,18 @@
-package com.nbottarini.asimov.flagz.activations
+package com.nbottarini.asimov.flagz.conditionalStrategies
 
 import com.nbottarini.asimov.time.Clock
 import com.nbottarini.asimov.time.LocalDateTimeParser
 import com.nbottarini.asimov.flagz.Feature
-import com.nbottarini.asimov.flagz.activations.ReleaseDateActivationStrategy.Companion.PARAM_DATE
-import com.nbottarini.asimov.flagz.activations.ReleaseDateActivationStrategyTest.Features.*
-import com.nbottarini.asimov.flagz.annotations.Activation
-import com.nbottarini.asimov.flagz.annotations.ActivationParam
-import com.nbottarini.asimov.flagz.metadata.defaultState
+import com.nbottarini.asimov.flagz.conditionalStrategies.ReleaseDateStrategy.Companion.PARAM_DATE
+import com.nbottarini.asimov.flagz.conditionalStrategies.ReleaseDateStrategyTest.Features.*
+import com.nbottarini.asimov.flagz.manager.metadata.defaultState
 import com.nbottarini.asimov.flagz.user.SimpleFeatureUser
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.time.format.DateTimeParseException
 
-class ReleaseDateActivationStrategyTest {
+class ReleaseDateStrategyTest {
     @Test
     fun `isEnabled returns true if release date has passed`() {
         Clock.stoppedAt(LocalDateTimeParser().parseISO8601("2020-09-06T11:00:00Z"))
@@ -53,19 +51,19 @@ class ReleaseDateActivationStrategyTest {
     }
 
     private val user = SimpleFeatureUser("bob")
-    private val strategy = ReleaseDateActivationStrategy()
+    private val strategy = ReleaseDateStrategy()
 
     enum class Features: Feature {
-        @Activation(ReleaseDateActivationStrategy.ID, [ActivationParam(PARAM_DATE, "2020-09-06T10:00:00Z")])
+        @Conditional(ReleaseDateStrategy.ID, [Param(PARAM_DATE, "2020-09-06T10:00:00Z")])
         MY_FEATURE,
 
-        @Activation(UsersActivationStrategy.ID, [ActivationParam(PARAM_DATE, "")])
+        @Conditional(UsersStrategy.ID, [Param(PARAM_DATE, "")])
         EMPTY_DATE_FEATURE,
 
-        @Activation(UsersActivationStrategy.ID, [ActivationParam(PARAM_DATE, "10/6/2020")])
+        @Conditional(UsersStrategy.ID, [Param(PARAM_DATE, "10/6/2020")])
         INVALID_DATE_FEATURE,
 
-        @Activation(UsersActivationStrategy.ID)
+        @Conditional(UsersStrategy.ID)
         NO_DATE_PARAM_FEATURE,
     }
 }

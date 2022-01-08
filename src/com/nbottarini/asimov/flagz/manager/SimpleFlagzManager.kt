@@ -1,9 +1,9 @@
 package com.nbottarini.asimov.flagz.manager
 
 import com.nbottarini.asimov.flagz.Feature
-import com.nbottarini.asimov.flagz.metadata.defaultState
+import com.nbottarini.asimov.flagz.manager.metadata.defaultState
 import com.nbottarini.asimov.flagz.repositories.inMemory.InMemoryFeatureRepository
-import com.nbottarini.asimov.flagz.user.ThreadLocalUserProvider
+import com.nbottarini.asimov.flagz.user.provider.ThreadLocalUserProvider
 
 class SimpleFlagzManager: FlagzManager {
     private val repository = InMemoryFeatureRepository()

@@ -10,8 +10,6 @@ class FeatureState(
 ) {
     val strategyParams = strategyParams ?: mapOf()
 
-    fun hasStrategy() = !strategyId.isNullOrBlank()
-
     fun enabled() = FeatureState(feature, true, strategyId, strategyParams)
 
     fun disabled() = FeatureState(feature, false, strategyId, strategyParams)

@@ -1,14 +1,14 @@
 package com.nbottarini.asimov.flagz.manager
 
 import com.nbottarini.asimov.flagz.Feature
-import com.nbottarini.asimov.flagz.activations.UsersActivationStrategy
-import com.nbottarini.asimov.flagz.annotations.Activation
-import com.nbottarini.asimov.flagz.annotations.ActivationParam
-import com.nbottarini.asimov.flagz.annotations.EnabledByDefault
+import com.nbottarini.asimov.flagz.conditionalStrategies.UsersStrategy
+import com.nbottarini.asimov.flagz.conditionalStrategies.Conditional
+import com.nbottarini.asimov.flagz.conditionalStrategies.Param
+import com.nbottarini.asimov.flagz.EnabledByDefault
 import com.nbottarini.asimov.flagz.repositories.FeatureState
 import com.nbottarini.asimov.flagz.repositories.inMemory.InMemoryFeatureRepository
 import com.nbottarini.asimov.flagz.user.SimpleFeatureUser
-import com.nbottarini.asimov.flagz.user.ThreadLocalUserProvider
+import com.nbottarini.asimov.flagz.user.provider.ThreadLocalUserProvider
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -33,7 +33,7 @@ class DefaultFlagzManagerTest {
     }
 
     @Test
-    fun `isEnabled returns true if a feature is set in the repository`() {
+    fun `isEnabled returns true if a feature is enabled in the repository`() {
         repository.set(FeatureState(Features.FEATURE_1, isEnabled = true))
 
         assertThat(manager.isEnabled(Features.FEATURE_1)).isTrue
@@ -47,15 +47,39 @@ class DefaultFlagzManagerTest {
     }
 
     @Test
-    fun `isEnabled returns true if a feature is not set and marked as enabled by default`() {
+    fun `isEnabled returns true if a feature is not set and annotated with EnabledByDefault`() {
         assertThat(manager.isEnabled(Features.ENABLED_DEFAULT_FEATURE)).isTrue
     }
 
     @Test
-    fun `isEnabled returns false if a feature is disabled and marked as enabled by default`() {
+    fun `isEnabled returns false if a feature is disabled and annotated with EnabledByDefault`() {
         manager.disable(Features.ENABLED_DEFAULT_FEATURE)
 
         assertThat(manager.isEnabled(Features.ENABLED_DEFAULT_FEATURE)).isFalse
+    }
+
+    @Test
+    fun `isEnabled returns true if a feature is enabled and meets conditional for a user`() {
+        manager.enable(Features.USER_FEATURE)
+        userProvider.bind(SimpleFeatureUser("alice"))
+
+        assertThat(manager.isEnabled(Features.USER_FEATURE)).isTrue
+    }
+
+    @Test
+    fun `isEnabled returns false if a feature meets conditional for a user but is disabled`() {
+        manager.disable(Features.USER_FEATURE)
+        userProvider.bind(SimpleFeatureUser("alice"))
+
+        assertThat(manager.isEnabled(Features.USER_FEATURE)).isFalse
+    }
+
+    @Test
+    fun `isEnabled returns false if a feature is enabled but not meets conditional for a user`() {
+        manager.enable(Features.USER_FEATURE)
+        userProvider.bind(SimpleFeatureUser("bob"))
+
+        assertThat(manager.isEnabled(Features.USER_FEATURE)).isFalse
     }
 
     @Test
@@ -91,30 +115,6 @@ class DefaultFlagzManagerTest {
         assertThat(features).containsExactlyInAnyOrder(Features.FEATURE_1, Features.ENABLED_DEFAULT_FEATURE)
     }
 
-    @Test
-    fun `isEnabled returns true if a feature is enabled and activated for a user`() {
-        manager.enable(Features.USER_FEATURE)
-        userProvider.bind(SimpleFeatureUser("alice"))
-
-        assertThat(manager.isEnabled(Features.USER_FEATURE)).isTrue
-    }
-
-    @Test
-    fun `isEnabled returns false if a feature is activated for a user but disabled`() {
-        manager.disable(Features.USER_FEATURE)
-        userProvider.bind(SimpleFeatureUser("alice"))
-
-        assertThat(manager.isEnabled(Features.USER_FEATURE)).isFalse
-    }
-
-    @Test
-    fun `isEnabled returns false if a feature is enabled but not activated for a user`() {
-        manager.enable(Features.USER_FEATURE)
-        userProvider.bind(SimpleFeatureUser("bob"))
-
-        assertThat(manager.isEnabled(Features.USER_FEATURE)).isFalse
-    }
-
     private val repository = InMemoryFeatureRepository()
     private val userProvider = ThreadLocalUserProvider()
     private val manager = DefaultFlagzManager(Features::class.java, repository, userProvider)
@@ -126,8 +126,8 @@ class DefaultFlagzManagerTest {
         @EnabledByDefault
         ENABLED_DEFAULT_FEATURE,
 
-        @Activation(UsersActivationStrategy.ID, [
-            ActivationParam(UsersActivationStrategy.PARAM_USERS, "alice")
+        @Conditional(UsersStrategy.ID, [
+            Param(UsersStrategy.PARAM_USERS, "alice")
         ])
         USER_FEATURE,
     }

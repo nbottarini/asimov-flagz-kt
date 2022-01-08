@@ -1,19 +1,19 @@
 package com.nbottarini.asimov.flagz
 
-import com.nbottarini.asimov.flagz.activations.ActivationStrategy
+import com.nbottarini.asimov.flagz.conditionalStrategies.ConditionalStrategy
 import com.nbottarini.asimov.flagz.manager.DefaultFlagzManager
 import com.nbottarini.asimov.flagz.manager.FlagzManager
 import com.nbottarini.asimov.flagz.repositories.FeatureRepository
 import com.nbottarini.asimov.flagz.repositories.composite.CompositeFeatureRepository
 import com.nbottarini.asimov.flagz.repositories.inMemory.InMemoryFeatureRepository
-import com.nbottarini.asimov.flagz.user.ThreadLocalUserProvider
-import com.nbottarini.asimov.flagz.user.UserProvider
+import com.nbottarini.asimov.flagz.user.provider.ThreadLocalUserProvider
+import com.nbottarini.asimov.flagz.user.provider.UserProvider
 
 class FlagzInitializationBuilder {
     private var featureEnums = mutableListOf<Class<out Feature>>()
     private var repository: FeatureRepository = InMemoryFeatureRepository()
     private var userProvider: UserProvider = ThreadLocalUserProvider()
-    private var activationStrategies = mutableListOf<ActivationStrategy>()
+    private var conditionalStrategies = mutableListOf<ConditionalStrategy>()
 
     fun featureEnum(value: Class<out Feature>) = apply { featureEnums.add(value) }
 
@@ -25,11 +25,11 @@ class FlagzInitializationBuilder {
 
     fun userProvider(value: UserProvider) = apply { userProvider = value }
 
-    fun activationStrategy(value: ActivationStrategy) = apply { activationStrategies.add(value) }
+    fun conditionalStrategy(value: ConditionalStrategy) = apply { conditionalStrategies.add(value) }
 
     fun build(): FlagzManager {
         val manager = DefaultFlagzManager(featureEnums, repository, userProvider)
-        activationStrategies.forEach { manager.addActivationStrategy(it) }
+        conditionalStrategies.forEach { manager.addConditionalStrategy(it) }
         FlagzContext.init(manager)
         return manager
     }

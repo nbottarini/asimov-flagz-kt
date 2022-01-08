@@ -1,16 +1,14 @@
-package com.nbottarini.asimov.flagz.activations
+package com.nbottarini.asimov.flagz.conditionalStrategies
 
 import com.nbottarini.asimov.flagz.Feature
-import com.nbottarini.asimov.flagz.activations.UsersActivationStrategy.Companion.PARAM_USERS
-import com.nbottarini.asimov.flagz.activations.UsersActivationStrategyTest.Features.*
-import com.nbottarini.asimov.flagz.annotations.Activation
-import com.nbottarini.asimov.flagz.annotations.ActivationParam
-import com.nbottarini.asimov.flagz.metadata.defaultState
+import com.nbottarini.asimov.flagz.conditionalStrategies.UsersStrategy.Companion.PARAM_USERS
+import com.nbottarini.asimov.flagz.conditionalStrategies.UsersStrategyTest.Features.*
+import com.nbottarini.asimov.flagz.manager.metadata.defaultState
 import com.nbottarini.asimov.flagz.user.SimpleFeatureUser
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class UsersActivationStrategyTest {
+class UsersStrategyTest {
     @Test
     fun `isEnabled returns false if there is no current user`() {
         val isEnabled = strategy.isEnabled(MY_FEATURE.defaultState(), user = null)
@@ -41,16 +39,16 @@ class UsersActivationStrategyTest {
         assertThat(isEnabled).isFalse
     }
 
-    private val strategy = UsersActivationStrategy()
+    private val strategy = UsersStrategy()
 
     enum class Features: Feature {
-        @Activation(UsersActivationStrategy.ID, [ActivationParam(PARAM_USERS, "alice, bob")])
+        @Conditional(UsersStrategy.ID, [Param(PARAM_USERS, "alice, bob")])
         MY_FEATURE,
 
-        @Activation(UsersActivationStrategy.ID, [ActivationParam(PARAM_USERS, "")])
+        @Conditional(UsersStrategy.ID, [Param(PARAM_USERS, "")])
         EMPTY_USER_LIST_FEATURE,
 
-        @Activation(UsersActivationStrategy.ID)
+        @Conditional(UsersStrategy.ID)
         NO_USER_LIST_FEATURE,
     }
 }

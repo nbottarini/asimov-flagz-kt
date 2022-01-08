@@ -1,7 +1,7 @@
 package com.nbottarini.asimov.flagz.manager
 
 import com.nbottarini.asimov.flagz.Feature
-import com.nbottarini.asimov.flagz.user.UserProvider
+import com.nbottarini.asimov.flagz.user.provider.UserProvider
 
 interface FlagzManager {
     val userProvider: UserProvider
