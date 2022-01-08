@@ -3,8 +3,8 @@ package com.nbottarini.asimov.flagz.manager.metadata
 import com.nbottarini.asimov.flagz.Feature
 import com.nbottarini.asimov.flagz.conditionalStrategies.UsersStrategy
 import com.nbottarini.asimov.flagz.conditionalStrategies.UsersStrategy.Companion.PARAM_USERS
-import com.nbottarini.asimov.flagz.conditionalStrategies.Conditional
-import com.nbottarini.asimov.flagz.conditionalStrategies.Param
+import com.nbottarini.asimov.flagz.conditionalStrategies.annotations.Conditional
+import com.nbottarini.asimov.flagz.conditionalStrategies.annotations.Param
 import com.nbottarini.asimov.flagz.EnabledByDefault
 import com.nbottarini.asimov.flagz.manager.metadata.FeatureMetadataTest.Features.*
 import org.assertj.core.api.Assertions.assertThat

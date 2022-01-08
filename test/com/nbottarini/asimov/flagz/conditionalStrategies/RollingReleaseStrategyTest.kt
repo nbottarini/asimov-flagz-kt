@@ -1,11 +1,12 @@
-package com.nbottarini.asimov.flagz
+package com.nbottarini.asimov.flagz.conditionalStrategies
 
-import com.nbottarini.asimov.flagz.RollingReleaseStrategyTest.Features.MY_ROLLING_FEATURE
-import com.nbottarini.asimov.flagz.conditionalStrategies.Conditional
-import com.nbottarini.asimov.flagz.conditionalStrategies.Param
-import com.nbottarini.asimov.flagz.conditionalStrategies.RollingReleaseStrategy
-import com.nbottarini.asimov.flagz.conditionalStrategies.RollingReleaseStrategy.Companion.PARAM_PERCENTAGE
-import com.nbottarini.asimov.flagz.conditionalStrategies.StringHashCodeGenerator
+import com.nbottarini.asimov.flagz.Feature
+import com.nbottarini.asimov.flagz.conditionalStrategies.RollingReleaseStrategyTest.Features.MY_ROLLING_FEATURE
+import com.nbottarini.asimov.flagz.conditionalStrategies.annotations.Conditional
+import com.nbottarini.asimov.flagz.conditionalStrategies.annotations.Param
+import com.nbottarini.asimov.flagz.conditionalStrategies.rollingRelease.RollingReleaseStrategy
+import com.nbottarini.asimov.flagz.conditionalStrategies.rollingRelease.RollingReleaseStrategy.Companion.PARAM_PERCENTAGE
+import com.nbottarini.asimov.flagz.conditionalStrategies.rollingRelease.StringHashCodeGenerator
 import com.nbottarini.asimov.flagz.manager.metadata.defaultState
 import com.nbottarini.asimov.flagz.repositories.FeatureState
 import com.nbottarini.asimov.flagz.user.SimpleFeatureUser
@@ -83,8 +84,8 @@ class RollingReleaseStrategyTest {
         @Conditional(RollingReleaseStrategy.ID, [Param(PARAM_PERCENTAGE, "10")])
         MY_ROLLING_FEATURE
     }
-}
 
-class FakeHashCodeGenerator: StringHashCodeGenerator {
-    override fun calculateFor(value: String) = value.split(":").first().toIntOrNull() ?: 0
+    class FakeHashCodeGenerator: StringHashCodeGenerator {
+        override fun calculateFor(value: String) = value.split(":").first().toIntOrNull() ?: 0
+    }
 }

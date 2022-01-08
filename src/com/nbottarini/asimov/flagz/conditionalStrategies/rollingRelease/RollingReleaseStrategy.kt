@@ -1,5 +1,6 @@
-package com.nbottarini.asimov.flagz.conditionalStrategies
+package com.nbottarini.asimov.flagz.conditionalStrategies.rollingRelease
 
+import com.nbottarini.asimov.flagz.conditionalStrategies.ConditionalStrategy
 import com.nbottarini.asimov.flagz.repositories.FeatureState
 import com.nbottarini.asimov.flagz.user.FeatureUser
 

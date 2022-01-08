@@ -1,7 +1,7 @@
 package com.nbottarini.asimov.flagz.manager.metadata
 
 import com.nbottarini.asimov.flagz.Feature
-import com.nbottarini.asimov.flagz.conditionalStrategies.Conditional
+import com.nbottarini.asimov.flagz.conditionalStrategies.annotations.Conditional
 import com.nbottarini.asimov.flagz.EnabledByDefault
 import com.nbottarini.asimov.flagz.repositories.FeatureState
 
