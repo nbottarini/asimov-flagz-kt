@@ -265,6 +265,22 @@ enum class Features: Feature {
 ### ReleaseDateStrategy
 This strategy allows you to enable a feature in a certain date. The provided date must be in ISO 8601 format.
 
+### RollingReleaseStrategy
+This strategy allows you gradually enable a feature to a percentage of your user base.
+
+```kotlin
+enum class Features: Feature {
+    MY_FEATURE,
+
+    @Conditional(RollingReleaseStrategy.ID, [Param(PARAM_PERCENTAGE, "30")])
+    MY_OTHER_FEATURE
+}
+```
+
+The percentage value must be an integer between 0 and 100.
+A hashcode function is applied to each user's name and is normalized to a value between 0 and 100. All users with hashcode
+lower than the percentage have the feature enabled and the others disabled.
+
 ### UsersStrategy
 This strategy allows you to enable a feature only to certain users.
 
@@ -278,6 +294,18 @@ enum class Features: Feature {
 ```
 
 Users must be set by using a userProvider. Read next section for details.
+
+### UserAttributeStrategy
+This strategy allows you to enable a feature only to users that have some attribute.
+
+```kotlin
+enum class Features: Feature {
+    MY_FEATURE,
+
+    @Conditional(UserAttributeStrategy.ID, [Param(PARAM_NAME, "country"), Param(PARAM_VALUE, "AR")])
+    MY_OTHER_FEATURE
+}
+```
 
 ## User providers
 Allows the customization of feature flags per user or user's attributes.
