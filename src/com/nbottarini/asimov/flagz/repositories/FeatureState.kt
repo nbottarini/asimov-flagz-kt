@@ -14,6 +14,12 @@ class FeatureState(
 
     fun disabled() = FeatureState(feature, false, strategyId, strategyParams)
 
+    fun withParam(name: String, value: String): FeatureState {
+        val params = strategyParams.toMutableMap()
+        params[name] = value
+        return FeatureState(feature, isEnabled, strategyId, params)
+    }
+
     override fun equals(other: Any?) = other is FeatureState && other.feature == feature
 
     override fun hashCode() = feature.hashCode()
