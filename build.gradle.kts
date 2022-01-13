@@ -11,7 +11,7 @@ val nexusUsername: String? by project
 val nexusPassword: String? by project
 
 group = "com.nbottarini"
-version = "0.2.2"
+version = "0.2.3"
 
 repositories {
     mavenCentral()
@@ -19,7 +19,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("com.nbottarini:asimov-environment:1.0.1")
+    implementation("com.nbottarini:asimov-environment:2.0.0")
     implementation("com.nbottarini:asimov-time:0.5.1")
     implementation("com.google.code.gson:gson:2.8.9")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
